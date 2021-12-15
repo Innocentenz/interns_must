@@ -1,0 +1,19 @@
+# Fix for Apache AUTHORIZATION http header as it is stripped by default for security and should be
+# enabled explicity when needed
+SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
+SetEnvIf authorization_token .+ HTTP_AUTHORIZATION=$0
+SetEnvIf Content-Type .+ CONTENT_TYPE=$0
+
+#order deny allow
+#allow from all
+  Options -Indexes
+
+RewriteEngine On    # Turn on the rewriting engine
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Page Control
+RewriteRule    ^login$      front-end/index.html      [L]    # Handle apis structure requests
+
+# API controllers
+RewriteRule    ^signup$      API/controller/register-api.php      [L]    # Handle apis structure requests
